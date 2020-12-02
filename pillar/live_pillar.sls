@@ -14,5 +14,5 @@ cove:
 registry360:
   allowedhosts: data.threesixtygiving,.live.threesixtygiving.uk0.bigv.io
   servername: 'data.threesixtygiving.org'
-  https: 'yes'
+  https: 'force'
 
