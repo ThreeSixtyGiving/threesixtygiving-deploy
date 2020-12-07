@@ -1,15 +1,24 @@
 # threesixtygiving-deploy
 
-## To Check out
-    
-    git clone git@github.com:ThreeSixtyGiving/threesixtygiving-deploy.git threesixtygiving-deploy
-    cd threesixtygiving-deploy/
-    git clone git@github.com:ThreeSixtyGiving/threesixtygiving-deploy-salt-private.git salt/private
-    git clone git@github.com:ThreeSixtyGiving/threesixtygiving-deploy-pillar-private.git pillar/private
+The SaltStack configuration is split into three repositories.
+
+* threesixtygiving-deploy
+* threesixtygiving-deploy-salt-private
+* threesixtygiving-deploy-pillar-private
+
+## Requirements
+
+$ pip install salt
+
+(you may wish to use a virtualenv)
 
 ## To update to latest content
 
-    ./updateToMain.sh
+This will also clone the private repos if they don't exist
 
+`$ ./updateToMain.sh`
 
+## To use salt as a standard user
+
+`$ ./setupForNonRootUse.sh`
 
