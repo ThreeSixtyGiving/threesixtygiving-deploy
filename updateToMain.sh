@@ -6,7 +6,7 @@ git checkout main
 git pull
 
 echo "--------------------- PILLAR / PRIVATE"
-if [ ! -f "pillar/private" ]; then
+if [ ! -d "pillar/private" ]; then
   git clone git@github.com:ThreeSixtyGiving/threesixtygiving-deploy-pillar-private.git pillar/private
 fi
 
@@ -16,7 +16,7 @@ git pull
 cd ../..
 
 echo "--------------------- SALT / PRIVATE"
-if [ ! -f "salt/private" ]; then
+if [ ! -d "salt/private" ]; then
   git clone git@github.com:ThreeSixtyGiving/threesixtygiving-deploy-salt-private.git salt/private
 fi
 
