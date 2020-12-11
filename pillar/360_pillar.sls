@@ -4,7 +4,7 @@ cove:
   https: 'no'
   app: cove_360
 extra_cove_branches: # [] # remove the [] (empty list) if you re-add some values below
-  - name: cove-bods-16-reword-validation
+  - name: flattentool-342-last-modified-does-not-convert
     app: cove_360
 
 old_cove_branches:
@@ -12,4 +12,5 @@ old_cove_branches:
     app: cove_360
   - name: 360-fix-format-error
     app: cove_360
-
+  - name: cove-bods-16-reword-validation
+    app: cove_360
