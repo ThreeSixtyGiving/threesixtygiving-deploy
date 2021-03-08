@@ -291,6 +291,14 @@ datagetter_and_reports:
       - minute: 0
       - hour: 3
 
+additional_data_sources:
+    cron.present:
+      - name: cd /home/{{ pillar.datastore.user }}/datastore/ && source ./.ve/bin/activate && cd ./datastore/ &&  export DJANGO_SETTINGS_MODULE=settings.settings_360g &&  ./manage.py delete_org_data --no-prompt  && ./additional_data/sources/load_all_org_data.sh >> /home/datastore/logs/ftc_source_update_$(date +%d-%m-%Y-%s).log 2>&1
+      - user: {{ pillar.datastore.user }}
+      - minute: 0
+      - hour: 23
+      - daymonth: 1
+
 ##### Apache
 
 {{
