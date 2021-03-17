@@ -3,6 +3,8 @@ cove:
   gitbranch: live
   servername: dataquality.threesixtygiving.org
   https: 'force'
+  # uwsgi_port other than 3031 is needed for Ubuntu 20, not sure why
+  #uwsgi_port: 3095
   piwik:
     url: '//mon.opendataservices.coop/piwik/'
     site_id: '19' 

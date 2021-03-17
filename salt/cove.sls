@@ -28,7 +28,9 @@ cove-deps:
         - python-virtualenv
         {% endif %}
         {% if grains['osrelease'] == '20.04' %}
+        - python3-pip
         - python3-virtualenv
+        - python3-dev
         - gcc
         - libxslt1-dev
         {% endif %}
@@ -109,13 +111,35 @@ assets_base_url: {{ assets_base_url }}
     - python: /usr/bin/python3
     - user: {{ user }}
     - system_site_packages: False
-    - requirements: {{ djangodir }}requirements{{ '_iati' if app=='cove_iati' else '' }}.txt
+{% if grains['osrelease'] == '18.04' or grains['osrelease'] == '16.04' %}
+    - requirements: {{ djangodir }}requirements.txt
+{% endif %}
     - require:
       - pkg: cove-deps
       - git: {{ giturl }}{{ djangodir }}
       - file: set_lc_all # required to avoid unicode errors for the "schema" library
     - watch_in:
       - service: apache2
+
+{% if grains['osrelease'] == '20.04' %}
+# Fix permissions in virtual env
+{{ djangodir }}fix-ve-permissions:
+  cmd.run:
+    - name: chown -R {{ user }}:{{ user }} .ve
+    - user: root
+    - cwd: {{ djangodir }}
+    - require:
+      - virtualenv: {{ djangodir }}.ve/
+
+# This should ideally be in virtualenv.managed but we get an error if we do that
+{{ djangodir }}install-python-packages:
+  cmd.run:
+    - name: . .ve/bin/activate; pip install -r requirements.txt
+    - user: {{ user }}
+    - cwd: {{ djangodir }}
+    - require:
+      - virtualenv: {{ djangodir }}.ve/
+{% endif %}
 
 migrate-{{name}}:
   cmd.run:
@@ -126,6 +150,9 @@ migrate-{{name}}:
       - virtualenv: {{ djangodir }}.ve/
     - onchanges:
       - git: {{ giturl }}{{ djangodir }}
+{% if grains['osrelease'] == '20.04' %}
+      - cmd: {{ djangodir }}install-python-packages
+{% endif %}
 
 compilemessages-{{name}}:
   cmd.run:
@@ -136,6 +163,9 @@ compilemessages-{{name}}:
       - virtualenv: {{ djangodir }}.ve/
     - onchanges:
       - git: {{ giturl }}{{ djangodir }}
+{% if grains['osrelease'] == '20.04' %}
+      - cmd: {{ djangodir }}install-python-packages
+{% endif %}
 
 collectstatic-{{name}}:
   cmd.run:
@@ -146,6 +176,9 @@ collectstatic-{{name}}:
       - virtualenv: {{ djangodir }}.ve/
     - onchanges:
       - git: {{ giturl }}{{ djangodir }}
+{% if grains['osrelease'] == '20.04' %}
+      - cmd: {{ djangodir }}install-python-packages
+{% endif %}
 
 {{ djangodir }}static/:
   file.directory:
@@ -227,10 +260,11 @@ MAILTO:
 
 # We were having problems with the Raven library for Sentry on Ubuntu 18
 # https://github.com/getsentry/raven-python/issues/1311
-# Reloading the server manually after a short bit seemed to be the only fix.
+# Reload the server manually after a short bit seemed to be the only fix.
+# And we restart the server because when adding new sites, a reload crashes
 # In testing, the code above seems not to always restart uwsgi anyway so we are happy putting this in.
 # (Well, we are not happy about this situation at all, but we think this won't cause any problems at least.)
 reload_uwsgi_service:
   cmd.run:
-    - name: sleep 10; /etc/init.d/uwsgi reload
+    - name: sleep 10; /etc/init.d/uwsgi restart
     - order: last
