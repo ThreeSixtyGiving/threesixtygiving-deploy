@@ -5,8 +5,8 @@ domain_prefix: 'dev.'
 banner_message: 'This is a development site with experimental features. Do not rely on it.'
 cove:
   gitbranch: live
-  piwik:
-    url: '//mon.opendataservices.coop/piwik/'
+  matomo:
+    url: '//matomo.opendataservices.coop/threesixtygiving/'
     site_id: '1' 
     dimension_map: 'file_type=2,page_type=3,form_name=4,language=5,exit_language=6'
   larger_uwsgi_limits: True

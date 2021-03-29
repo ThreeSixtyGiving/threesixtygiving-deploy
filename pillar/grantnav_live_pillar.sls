@@ -9,8 +9,8 @@ grantnav:
     - orange.grantnav.threesixtygiving.org
 
   allowedhosts: '.live.threesixtygiving.uk0.bigv.io,.threesixtygiving.org'
-  piwik:
-    url: '//mon.opendataservices.coop/piwik/'
+  matomo:
+    url: '//matomo.opendataservices.coop/threesixtygiving/'
     site_id: '9'
 
   datastore_url: 'https://store.data.threesixtygiving.org/api/grantnav/updates'
