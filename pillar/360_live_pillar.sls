@@ -4,7 +4,7 @@ cove:
   servername: dataquality.threesixtygiving.org
   https: 'force'
   # uwsgi_port other than 3031 is needed for Ubuntu 20, not sure why
-  #uwsgi_port: 3095
+  uwsgi_port: 3095
   matomo:
     url: '//matomo.opendataservices.coop/threesixtygiving/'
     site_id: '19' 

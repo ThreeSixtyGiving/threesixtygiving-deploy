@@ -7,6 +7,8 @@ grantnav-live-cabinet-preview:       grantnav-cabinet-dev.default.threesixtygivi
 #   live:
 grantnav-live-teal:     grantnav-teal.live.threesixtygiving.uk0.bigv.io
 grantnav-live-orange:   grantnav-orange.live.threesixtygiving.uk0.bigv.io
+
+# cove-360-live is now shutdown; if transfer to cove-360-live-2 is a success delete soon https://opendataservices.plan.io/issues/28823
 cove-360-live:          cove-360-live.live.threesixtygiving.uk0.bigv.io
 cove-360-live-2:        cove-360-live-2.live.threesixtygiving.uk0.bigv.io
 data-360-live:          data.live.threesixtygiving.uk0.bigv.io
