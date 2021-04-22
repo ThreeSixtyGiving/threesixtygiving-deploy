@@ -196,27 +196,27 @@ uwsgi('grantnav.ini', name='grantnav.ini')
     - user: www-data
     - group: www-data
 
-/etc/apache2/ssl/ssl.2019.cert:
+/etc/apache2/ssl/ssl.2021.cert:
   file.managed:
-    - source: salt://private/grantnav/ssl.2019.cert
+    - source: salt://private/grantnav/ssl.2021.cert
     - user: www-data
     - group: www-data
     - mode: 700
     - require:
       - file: /etc/apache2/ssl
 
-/etc/apache2/ssl/ssl.2019.key:
+/etc/apache2/ssl/ssl.2021.key:
   file.managed:
-    - source: salt://private/grantnav/ssl.2019.key
+    - source: salt://private/grantnav/ssl.2021.key
     - user: www-data
     - group: www-data
     - mode: 700
     - require:
       - file: /etc/apache2/ssl
 
-/etc/apache2/ssl/ssl.2019.intermediate:
+/etc/apache2/ssl/ssl.2021.intermediate:
   file.managed:
-    - source: salt://private/grantnav/ssl.2019.intermediate
+    - source: salt://private/grantnav/ssl.2021.intermediate
     - user: www-data
     - group: www-data
     - mode: 700
