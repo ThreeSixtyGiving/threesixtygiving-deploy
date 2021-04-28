@@ -2,7 +2,7 @@ grantnav:
   user: 'grantnav'
   git_url: 'https://github.com/ThreeSixtyGiving/grantnav.git'
   branch: 'master'
-  static_dir: '/var/www/static/'
+  static_dir: '/var/www/static/grantnav/'
   serveraliases:
     - grantnav.threesixtygiving.org
     - teal.grantnav.threesixtygiving.org

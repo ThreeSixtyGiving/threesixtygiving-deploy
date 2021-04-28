@@ -5,7 +5,7 @@ datastore:
   branch: 'master'
   database_name: '360givingdatastore'
   git_url: 'https://github.com/threesixtygiving/datastore.git'
-  static_dir: '/var/www/static/'
+  static_dir: '/var/www/static/datastore/'
   grantnav_packages_dir: '/var/www/grantnav_packages/'
   reports_dir: '/var/www/reports/'
 
