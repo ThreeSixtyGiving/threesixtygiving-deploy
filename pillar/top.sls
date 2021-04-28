@@ -25,3 +25,8 @@ base:
   'grantnav-live-*':
      - grantnav_live_pillar
      - private.grantnav_live_pillar
+
+  'dev':
+     - new_dev_pillar
+     - private.360_datastore_live_pillar
+     - private.grantnav_live_pillar

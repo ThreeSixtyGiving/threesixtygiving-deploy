@@ -2,8 +2,7 @@
 
 
 #   dev:
-grantnav-dev:           grantnav-dev.default.threesixtygiving.uk0.bigv.io
-grantnav-live-cabinet-preview:       grantnav-cabinet-dev.default.threesixtygiving.uk0.bigv.io
+dev:           dev.default.threesixtygiving.uk0.bigv.io
 #   live:
 grantnav-live-teal:     grantnav-teal.live.threesixtygiving.uk0.bigv.io
 grantnav-live-orange:   grantnav-orange.live.threesixtygiving.uk0.bigv.io
