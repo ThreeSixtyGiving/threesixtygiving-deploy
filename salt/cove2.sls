@@ -1,3 +1,9 @@
+
+#############################################################################
+# This is a copy of cove.sls which has been amened to use 360's dataquality #
+# repo instead of cove from ODS's repo                                      #
+#############################################################################
+
 # For a live deploy, please follow the instructions at https://cove.readthedocs.io/en/latest/deployment/
 {% from 'lib.sls' import createuser, apache, uwsgi, removeapache, removeuwsgi %}
 
