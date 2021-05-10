@@ -16,15 +16,11 @@
 {% set giturl = 'https://github.com/threesixtygiving/dataquality.git' %}
 
 
-# FIXME this breaks the for loop macro thing for multiple branches
 
 {% if pillar.cove.gitbranch %}
-
-{% set checkout_dir="/home/"+user+"/dataquality/" %}
-
+  {% set checkout_dir="/home/"+user+"/dataquality/" %}
 {% else %}
-{% set checkout_dir="/home/"+user+"/dataquality/" %}
-
+  {% set checkout_dir="/home/"+user+"/dataquality/" %}
 {% endif %}
 
 
@@ -233,6 +229,8 @@ MAILTO:
     - value: code@opendataservices.coop
     - user: cove
 
+## Run the macro
+
 {{ cove(
     name='cove',
     giturl=pillar.cove.giturl if 'giturl' in pillar.cove else giturl,
@@ -243,26 +241,6 @@ MAILTO:
     app=pillar.cove.app if 'app' in pillar.cove else 'cove',
     assets_base_url=pillar.cove.assets_base_url if 'assets_base_url' in pillar.cove else '',
     user=user) }}
-
-{% for branch in pillar.extra_cove_branches %}
-{{ cove(
-    name='cove-'+branch.name,
-    giturl=pillar.cove.giturl if 'giturl' in pillar.cove else giturl,
-    branch=branch.name,
-    djangodir=checkout_dir+'/cove/',
-    uwsgi_port=branch.uwsgi_port if 'uwsgi_port' in branch else None,
-    servername=branch.servername if 'servername' in branch else None,
-    assets_base_url=pillar.cove.assets_base_url if 'assets_base_url' in pillar.cove else '',
-    app=branch.app if 'app' in branch else 'cove',
-    user=user) }}
-{% endfor %}
-
-{% for branch in pillar.old_cove_branches %}
-{{ removecove(
-    name='cove-'+branch.name,
-    djangodir='/home/'+user+'/cove-'+branch.name+'/cove/',
-    app=branch.app) }}
-{% endfor %}
 
 
 
