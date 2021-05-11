@@ -133,20 +133,20 @@ assets_base_url: {{ assets_base_url }}
     - watch_in:
       - service: apache2
 
-# Fix permissions in virtual env
-{{ checkout_dir }}fix-ve-permissions:
-  cmd.run:
-    - name: chown -R {{ user }}:{{ user }} {{ checkout_dir }}.ve
-    - user: root
-    - cwd: {{ checkout_dir }}
-    - require:
-      - virtualenv: {{ checkout_dir }}.ve/
-
 # This should ideally be in virtualenv.managed but we get an error if we do that
 {{ checkout_dir }}install-python-packages:
   cmd.run:
     - name: . {{ checkout_dir }}.ve/bin/activate; pip install -r {{checkout_dir}}/requirements_cove.txt
     - user: {{ user }}
+    - cwd: {{ checkout_dir }}
+    - require:
+      - virtualenv: {{ checkout_dir }}.ve/
+
+# Fix permissions in virtual env
+{{ checkout_dir }}fix-ve-permissions:
+  cmd.run:
+    - name: chown -R {{ user }}:{{ user }} {{ checkout_dir }}.ve
+    - user: root
     - cwd: {{ checkout_dir }}
     - require:
       - virtualenv: {{ checkout_dir }}.ve/
@@ -169,6 +169,7 @@ compilemessages-{{name}}:
     - cwd: {{ djangodir }}
     - require:
       - virtualenv: {{ checkout_dir }}.ve/
+      - cmd: {{ checkout_dir }}fix-ve-permissions
     - onchanges:
       - git: {{ giturl }}{{ djangodir }}
       - cmd: {{ checkout_dir }}install-python-packages
