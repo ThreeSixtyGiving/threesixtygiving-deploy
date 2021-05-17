@@ -1,9 +1,3 @@
-
-#############################################################################
-# This is a copy of cove.sls which has been amened to use 360's dataquality #
-# repo instead of cove from ODS's repo                                      #
-#############################################################################
-
 # For a live deploy, please follow the instructions at https://cove.readthedocs.io/en/latest/deployment/
 {% from 'lib.sls' import createuser, apache, uwsgi, removeapache, removeuwsgi %}
 
@@ -13,17 +7,7 @@
 {% set user = 'cove' %}
 {{ createuser(user) }}
 
-{% set giturl = 'https://github.com/threesixtygiving/dataquality.git' %}
-
-
-
-{% if pillar.cove.gitbranch %}
-  {% set checkout_dir="/home/"+user+"/dataquality/" %}
-{% else %}
-  {% set checkout_dir="/home/"+user+"/dataquality/" %}
-{% endif %}
-
-
+{% set giturl = 'https://github.com/OpenDataServices/cove.git' %}
 
 # libapache2-mod-wsgi-py3
 # gettext
@@ -58,12 +42,10 @@ remoteip:
       - watch_in:
         - service: apache2
 
-{% macro cove(name, giturl, branch, djangodir, user, uwsgi_port, servername=None, app='cove_project', assets_base_url='') %}
+{% macro cove(name, giturl, branch, djangodir, user, uwsgi_port, servername=None, app='cove', assets_base_url='') %}
 
 
 {% set extracontext %}
-
-checkout_dir: {{ checkout_dir }}
 djangodir: {{ djangodir }}
 {% if grains['osrelease'] == '16.04' %}
 uwsgi_port: null
@@ -99,7 +81,7 @@ assets_base_url: {{ assets_base_url }}
   git.latest:
     - name: {{ giturl }}
     - rev: {{ branch }}
-    - target: {{ checkout_dir }}
+    - target: {{ djangodir }}
     - user: {{ user }}
     - force_fetch: True
     - force_reset: True
@@ -121,7 +103,7 @@ assets_base_url: {{ assets_base_url }}
       - user
       - mode
 
-{{checkout_dir}}.ve/:
+{{ djangodir }}.ve/:
   virtualenv.managed:
     - python: /usr/bin/python3
     - user: {{ user }}
@@ -133,57 +115,56 @@ assets_base_url: {{ assets_base_url }}
     - watch_in:
       - service: apache2
 
-# This should ideally be in virtualenv.managed but we get an error if we do that
-{{ checkout_dir }}install-python-packages:
-  cmd.run:
-    - name: . {{ checkout_dir }}.ve/bin/activate; pip install -r {{checkout_dir}}/requirements_cove.txt
-    - user: {{ user }}
-    - cwd: {{ checkout_dir }}
-    - require:
-      - virtualenv: {{ checkout_dir }}.ve/
-
 # Fix permissions in virtual env
-{{ checkout_dir }}fix-ve-permissions:
+{{ djangodir }}fix-ve-permissions:
   cmd.run:
-    - name: chown -R {{ user }}:{{ user }} {{ checkout_dir }}.ve
+    - name: chown -R {{ user }}:{{ user }} .ve
     - user: root
-    - cwd: {{ checkout_dir }}
+    - cwd: {{ djangodir }}
     - require:
-      - virtualenv: {{ checkout_dir }}.ve/
+      - virtualenv: {{ djangodir }}.ve/
+
+# This should ideally be in virtualenv.managed but we get an error if we do that
+{{ djangodir }}install-python-packages:
+  cmd.run:
+    - name: . .ve/bin/activate; pip install -r requirements.txt
+    - user: {{ user }}
+    - cwd: {{ djangodir }}
+    - require:
+      - virtualenv: {{ djangodir }}.ve/
 
 migrate-{{name}}:
   cmd.run:
-    - name: . {{ checkout_dir }}.ve/bin/activate; DJANGO_SETTINGS_MODULE={{ app }}.settings python {{ djangodir }}/manage.py migrate --noinput
+    - name: . .ve/bin/activate; DJANGO_SETTINGS_MODULE={{ app }}.settings python manage.py migrate --noinput
     - runas: {{ user }}
     - cwd: {{ djangodir }}
     - require:
-      - virtualenv: {{ checkout_dir }}.ve/
+      - virtualenv: {{ djangodir }}.ve/
     - onchanges:
       - git: {{ giturl }}{{ djangodir }}
-      - cmd: {{ checkout_dir }}install-python-packages
+      - cmd: {{ djangodir }}install-python-packages
 
 compilemessages-{{name}}:
   cmd.run:
-    - name: . {{ checkout_dir }}.ve/bin/activate; DJANGO_SETTINGS_MODULE={{ app }}.settings  python {{ djangodir }}/manage.py compilemessages
+    - name: . .ve/bin/activate; DJANGO_SETTINGS_MODULE={{ app }}.settings  python manage.py compilemessages
     - runas: {{ user }}
     - cwd: {{ djangodir }}
     - require:
-      - virtualenv: {{ checkout_dir }}.ve/
-      - cmd: {{ checkout_dir }}fix-ve-permissions
+      - virtualenv: {{ djangodir }}.ve/
     - onchanges:
       - git: {{ giturl }}{{ djangodir }}
-      - cmd: {{ checkout_dir }}install-python-packages
+      - cmd: {{ djangodir }}install-python-packages
 
 collectstatic-{{name}}:
   cmd.run:
-    - name: . {{ checkout_dir }}.ve/bin/activate; DJANGO_SETTINGS_MODULE={{ app }}.settings  python {{ djangodir }}/manage.py collectstatic --noinput
+    - name: . .ve/bin/activate; DJANGO_SETTINGS_MODULE={{ app }}.settings  python manage.py collectstatic --noinput
     - runas: {{ user }}
     - cwd: {{ djangodir }}
     - require:
-      - virtualenv: {{ checkout_dir }}.ve/
+      - virtualenv: {{ djangodir }}.ve/
     - onchanges:
       - git: {{ giturl }}{{ djangodir }}
-      - cmd: {{ checkout_dir }}install-python-packages
+      - cmd: {{ djangodir }}install-python-packages
 
 {{ djangodir }}static/:
   file.directory:
@@ -201,7 +182,7 @@ collectstatic-{{name}}:
     - require:
       - cmd: collectstatic-{{name}}
 
-cd {{ djangodir }}; . {{ checkout_dir }}.ve/bin/activate; DJANGO_SETTINGS_MODULE={{ app }}.settings SECRET_KEY="{{pillar.cove.secret_key}}" python manage.py expire_files:
+cd {{ djangodir }}; . .ve/bin/activate; DJANGO_SETTINGS_MODULE={{ app }}.settings SECRET_KEY="{{pillar.cove.secret_key}}" python manage.py expire_files:
   cron.present:
     - identifier: COVE_EXPIRE_FILES{% if name != 'cove' %}_{{ name }}{% endif %}
     - user: cove
@@ -218,7 +199,7 @@ cd {{ djangodir }}; . {{ checkout_dir }}.ve/bin/activate; DJANGO_SETTINGS_MODULE
 {{ djangodir }}:
     file.absent
 
-cd {{ djangodir }}; . {{ checkout_dir }}.ve/bin/activate; DJANGO_SETTINGS_MODULE={{ app }}.settings SECRET_KEY="{{pillar.cove.secret_key}}" python manage.py expire_files:
+cd {{ djangodir }}; . .ve/bin/activate; DJANGO_SETTINGS_MODULE={{ app }}.settings SECRET_KEY="{{pillar.cove.secret_key}}" python manage.py expire_files:
   cron.absent:
     - identifier: COVE_EXPIRE_FILES{% if name != 'cove' %}_{{ name }}{% endif %}
     - user: cove
@@ -230,18 +211,36 @@ MAILTO:
     - value: code@opendataservices.coop
     - user: cove
 
-## Run the macro
-
 {{ cove(
     name='cove',
     giturl=pillar.cove.giturl if 'giturl' in pillar.cove else giturl,
     branch=pillar.cove.gitbranch if 'gitbranch' in pillar.cove else pillar.default_branch,
-    djangodir=checkout_dir+'/cove/',
+    djangodir='/home/'+user+'/cove/',
     uwsgi_port=pillar.cove.uwsgi_port if 'uwsgi_port' in pillar.cove else 3031,
     servername=pillar.cove.servername if 'servername' in pillar.cove else None,
     app=pillar.cove.app if 'app' in pillar.cove else 'cove',
     assets_base_url=pillar.cove.assets_base_url if 'assets_base_url' in pillar.cove else '',
     user=user) }}
+
+{% for branch in pillar.extra_cove_branches %}
+{{ cove(
+    name='cove-'+branch.name,
+    giturl=pillar.cove.giturl if 'giturl' in pillar.cove else giturl,
+    branch=branch.name,
+    djangodir='/home/'+user+'/cove-'+branch.name+'/',
+    uwsgi_port=branch.uwsgi_port if 'uwsgi_port' in branch else None,
+    servername=branch.servername if 'servername' in branch else None,
+    assets_base_url=pillar.cove.assets_base_url if 'assets_base_url' in pillar.cove else '',
+    app=branch.app if 'app' in branch else 'cove',
+    user=user) }}
+{% endfor %}
+
+{% for branch in pillar.old_cove_branches %}
+{{ removecove(
+    name='cove-'+branch.name,
+    djangodir='/home/'+user+'/cove-'+branch.name+'/',
+    app=branch.app) }}
+{% endfor %}
 
 
 

@@ -1,16 +1,5 @@
 cove:
-  gitbranch: live
+  gitbranch: main
   allowedhosts: '.threesixtygiving.org,.threesixtygiving.uk0.bigv.io'
   https: 'no'
-  app: cove_360
-extra_cove_branches: # [] # remove the [] (empty list) if you re-add some values below
-  - name: flattentool-342-last-modified-does-not-convert
-    app: cove_360
-
-old_cove_branches:
-  - name: test-360-package-metadata
-    app: cove_360
-  - name: 360-fix-format-error
-    app: cove_360
-  - name: cove-bods-16-reword-validation
-    app: cove_360
+  app: cove_project
