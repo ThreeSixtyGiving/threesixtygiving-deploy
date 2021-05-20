@@ -19,7 +19,8 @@ registry360:
   allowedhosts: .default.opendataservices.uk0.bigv.io
 automatic_reboot: 'true'
 extra_cove_branches: [] # remove the [] (empty list) if you re-add some values below
-
+  - name: additional-checks-dates
+    app: cove_360
 
 # Do NOT just delete branches from extra_cove_branches above! Instead add them to old_cove_branches!
 # They will be removed from the dev servers.
