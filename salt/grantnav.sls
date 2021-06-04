@@ -179,9 +179,11 @@ uwsgi('grantnav.ini', name='grantnav.ini')
 ##### Elasticsearch config
 
 /etc/elasticsearch/elasticsearch.yml:
-  file.append:
-    - text: |
-        cluster.name: {{ grains.host }}
+  file.managed:
+    - source: salt://grantnav/elasticsearch.yml
+    - template: jinja
+    - context:
+       cluster_name: {{ gains.host }}
     - require:
       - pkg: elasticsearch-base
 

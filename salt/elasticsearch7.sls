@@ -18,14 +18,5 @@ elasticsearch-base:
     - watch:
       - file: /etc/elasticsearch/*
 
+  # Note: Any apps using this should set up their own version of /etc/elasticsearch/elasticsearch.yml
   # Ensure elasticsearch only listens on localhost, doesn't multicast
-#  file.append:
-#    - name: /etc/elasticsearch/elasticsearch.yml
-#    - text: |
-#        network.host: 127.0.0.1
-#        discovery.zen.ping.multicast.enabled: false
-
-#/etc/default/elasticsearch:
-#  file.managed:
-#    - source: salt://etc-default/elasticsearch
-#    - template: jinja
