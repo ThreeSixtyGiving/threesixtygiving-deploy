@@ -211,6 +211,76 @@ colab_notebooks10:
       - service: postgresql
 
 
+colab_notebooks11:
+    postgres_user.present:
+      - password: {{ pillar.datastore_private.colab_pg_password11 }}
+      - groups: readaccess
+      - require:
+        - service: postgresql
+
+colab_notebooks12:
+    postgres_user.present:
+      - password: {{ pillar.datastore_private.colab_pg_password12 }}
+      - groups: readaccess
+      - require:
+        - service: postgresql
+
+colab_notebooks13:
+    postgres_user.present:
+      - password: {{ pillar.datastore_private.colab_pg_password13 }}
+      - groups: readaccess
+      - require:
+        - service: postgresql
+
+colab_notebooks14:
+    postgres_user.present:
+      - password: {{ pillar.datastore_private.colab_pg_password14 }}
+      - groups: readaccess
+      - require:
+        - service: postgresql
+
+colab_notebooks15:
+    postgres_user.present:
+      - password: {{ pillar.datastore_private.colab_pg_password15 }}
+      - groups: readaccess
+      - require:
+        - service: postgresql
+
+colab_notebooks16:
+    postgres_user.present:
+      - password: {{ pillar.datastore_private.colab_pg_password16 }}
+      - groups: readaccess
+      - require:
+        - service: postgresql
+
+colab_notebooks17:
+    postgres_user.present:
+      - password: {{ pillar.datastore_private.colab_pg_password17 }}
+      - groups: readaccess
+      - require:
+        - service: postgresql
+
+colab_notebooks18:
+    postgres_user.present:
+      - password: {{ pillar.datastore_private.colab_pg_password18 }}
+      - groups: readaccess
+      - require:
+        - service: postgresql
+
+colab_notebooks19:
+    postgres_user.present:
+      - password: {{ pillar.datastore_private.colab_pg_password19 }}
+      - groups: readaccess
+      - require:
+        - service: postgresql
+
+colab_notebooks20:
+    postgres_user.present:
+      - password: {{ pillar.datastore_private.colab_pg_password20 }}
+      - groups: readaccess
+      - require:
+        - service: postgresql
+
 
 update_postgres_config_colab_user_access:
   file.managed:
