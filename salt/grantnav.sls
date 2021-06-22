@@ -186,6 +186,13 @@ uwsgi('grantnav.ini', name='grantnav.ini')
       - pkg: elasticsearch-base
 
 
+{% if grains['mem_total'] > 7000 %}
+/etc/elasticsearch/jvm.options.d/heapsize.options:
+  file.managed:
+    - source: salt://grantnav/heapsize.options
+    - template: jinja
+{% endif %}
+
 
 ##### threesixtygiving.org SSL cert
 
