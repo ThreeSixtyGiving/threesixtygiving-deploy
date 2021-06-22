@@ -31,8 +31,8 @@ base:
     - prometheus-client-apache
 
   'dev':
-    - cove
- #   - grantnav
+#    - cove
+#    - grantnav
 #    - registry360
 #    - 360-datastore
- #   - prometheus-client-apache
+#    - prometheus-client-apache

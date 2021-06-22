@@ -28,7 +28,7 @@ grantnav:
     url: '//matomo.opendataservices.coop/threesixtygiving/'
     site_id: '-1'
 
-  datastore_url: 'https://store.dev.default.threesixtygiving.uk0.bigv.io/api/grantnav/updates'
+  datastore_url: 'http://store.data.threesixtygiving.org/api/grantnav/updates'
 
 registry360:
   allowedhosts: data.threesixtygiving,.live.threesixtygiving.uk0.bigv.io, .dev.default.threesixtygiving.uk0.bigv.io
