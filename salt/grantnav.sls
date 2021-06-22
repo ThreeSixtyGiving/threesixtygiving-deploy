@@ -93,6 +93,12 @@ update_static_dir:
     - onchanges:
       - git: {{ pillar.grantnav.git_url }}
 
+
+{{ pillar.grantnav.static_dir }}/robots.txt:
+  file.managed:
+    - source: salt://grantnav/robots.txt
+
+
 ##### Datastore data fetcher
 
 

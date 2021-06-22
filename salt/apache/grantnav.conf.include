@@ -25,3 +25,9 @@
                 AuthUserFile /home/prometheus-client/htpasswd
                 require valid-user
         </Location>
+
+        Alias /robots.txt {{ pillar.grantnav.static_dir }}/robots.txt
+        <Location /robots.txt>
+                ProxyPass !
+                Require all granted
+        </Location>
