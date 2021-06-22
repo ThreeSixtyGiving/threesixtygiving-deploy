@@ -30,7 +30,7 @@ base:
     - cove
     - prometheus-client-apache
 
-  'dev':
+#  'dev':
 #    - cove
 #    - grantnav
 #    - registry360
