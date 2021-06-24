@@ -2,6 +2,8 @@ User-agent: *
 User-agent: The Knowledge AI
 User-agent: bingbot
 User-agent: AhrefsBot
+User-agent: SemrushBot
+User-agent: MJ12bot
 Disallow: /search
 Disallow: /recipients
 Disallow: /funders
