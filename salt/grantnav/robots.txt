@@ -1,6 +1,7 @@
 User-agent: *
 User-agent: The Knowledge AI
 User-agent: bingbot
+User-agent: AhrefsBot
 Disallow: /search
 Disallow: /recipients
 Disallow: /funders
