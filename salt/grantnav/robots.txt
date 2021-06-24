@@ -1,4 +1,6 @@
 User-agent: *
+User-agent: The Knowledge AI
+User-agent: bingbot
 Disallow: /search
 Disallow: /recipients
 Disallow: /funders
