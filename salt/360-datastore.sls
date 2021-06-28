@@ -359,7 +359,7 @@ datagetter_and_reports:
       - name: /home/{{ pillar.datastore.user }}/data_runner.sh
       - user: {{ pillar.datastore.user }}
       - minute: 0
-      - hour: 3
+      - hour: 1
 
 additional_data_sources:
     cron.present:
